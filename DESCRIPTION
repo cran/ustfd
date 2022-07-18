@@ -1,6 +1,6 @@
 Package: ustfd
 Title: API Client for US Treasury Fiscal Data
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Guillermo", "Roditi Dominguez", , "guillermo@newriverinvestments.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7127-8742"))
@@ -15,9 +15,9 @@ Depends: R (>= 2.10)
 Suggests: testthat (>= 3.0.0), jsonlite
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2022-04-18 00:33:27 UTC; guill
+Packaged: 2022-07-16 20:43:15 UTC; guill
 Author: Guillermo Roditi Dominguez [aut, cre]
     (<https://orcid.org/0000-0002-7127-8742>)
 Maintainer: Guillermo Roditi Dominguez <guillermo@newriverinvestments.com>
 Repository: CRAN
-Date/Publication: 2022-04-18 14:30:02 UTC
+Date/Publication: 2022-07-18 08:10:02 UTC
