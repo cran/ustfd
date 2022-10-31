@@ -1,12 +1,12 @@
-d851142d495f53ab4ac1ecc272394b45 *DESCRIPTION
+06fa88cfeeee16c2b43ad63a329e6ea6 *DESCRIPTION
 71cac8869aace98dc2c4d4936b4fe0dd *LICENSE
 fdb644c2783c73d7e2a8613b2fef31e7 *NAMESPACE
-87c9fe3a49557c5ab4d478ca1a9e650b *NEWS.md
+6f1a5e840a0aabe76a4f585bd7df866f *NEWS.md
 e4deb4ebf7668997141f1458c4ec92b3 *R/sysdata.rda
-1c93610e6d921924400bffef270ad25f *R/ustfd.R
+5d02b6a0a0429b2a81522b069a218692 *R/ustfd.R
 8aa17e93266e3c8d5a03a63a159040c5 *R/ustfd_endpoints.R
-0f87ab35fcda6ca2bbaffec0b8089949 *R/ustfd_query.R
-b063e529e72fd52c89cd41ca1518b2c8 *R/ustfd_url.R
+4b5aa2193d37d068040abf33ce8e7036 *R/ustfd_query.R
+cb87b19b8b186f909d8352b99302b8b0 *R/ustfd_url.R
 8528a0488565c9f604f25f01665865a3 *README.md
 6865134bf652eaff70259143f25ed067 *man/ustfd_endpoints.Rd
 89fa40428da986ce72d26c25a03e7e26 *man/ustfd_field_dictionary.Rd
@@ -22,5 +22,5 @@ d41d8cd98f00b204e9800998ecf8427e *tests/testthat/json-response.txt
 640e28b094f82cec0725febf4181f87a *tests/testthat/sample-response.json
 f84975ea08dc11b8438b018e4c49aeb8 *tests/testthat/test-query.R
 c42af3512cf1d65dd0de34ab1492430d *tests/testthat/test-query_url.R
-fb76af15fbfe82349d10d83da7c5bb23 *tests/testthat/test-response_payload.R
+cbb587588793ba4f3bb20ee05fcce138 *tests/testthat/test-response_payload.R
 9d15a4db1b4905df52ea257f395a61c8 *tests/testthat/test-ustfd.R
