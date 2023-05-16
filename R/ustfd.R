@@ -29,7 +29,7 @@
 #' library(ustfd)
 #'
 #' exchange_rates <- ustfd_simple(
-#'   '/v1/accounting/od/rates_of_exchange',
+#'   'v1/accounting/od/rates_of_exchange',
 #'    fields = c(
 #'     'country_currency_desc', 'exchange_rate','record_date','effective_date'
 #'    ),
@@ -41,7 +41,7 @@
 #' }
 
 ustfd_simple <- function(
-  endpoint, filter=NA, fields=NA, sort=NA, page_size=NA, page_number=NA,
+  endpoint, filter=NULL, fields=NULL, sort=NULL, page_size=NULL, page_number=NULL,
   user_agent='http://github.com/groditi/ustfd'
   ){
   query <- ustfd_query(endpoint, filter, fields, sort, page_size, page_number)
@@ -78,7 +78,7 @@ ustfd_simple <- function(
 #' @examples
 #' \dontrun{
 #' library(ustfd)
-#' query <- ustfd_query('/v1/accounting/dts/dts_table_4', sort =c('-record_date'))
+#' query <- ustfd_query('v1/accounting/dts/dts_table_2', sort =c('-record_date'))
 #' response <- ustfd_request(query)
 #' payload_table <- ustfd_response_payload(response)
 #' payload_meta <- ustfd_response_meta_object(response)
@@ -121,7 +121,7 @@ ustfd_request <- function(
 #' @examples
 #' \dontrun{
 #' library(ustfd)
-#' query <- ustfd_query('/v1/accounting/dts/dts_table_4', sort =c('-record_date'))
+#' query <- ustfd_query('v1/accounting/dts/dts_table_2', sort =c('-record_date'))
 #' response <- ustfd_request(query)
 #' payload_table <- ustfd_response_payload(response)
 #' payload_meta <- ustfd_response_meta_object(response)
@@ -164,7 +164,7 @@ ustfd_json_response <- function(response, ...){
 #' @examples
 #' \dontrun{
 #' library(ustfd)
-#' query <- ustfd_query('/v1/accounting/dts/dts_table_4', sort =c('-record_date'))
+#' query <- ustfd_query('v1/accounting/dts/dts_table_2', sort =c('-record_date'))
 #' response <- ustfd_request(query)
 #' payload_table <- ustfd_response_payload(response)
 #' payload_meta <- ustfd_response_meta_object(response)
@@ -193,7 +193,7 @@ ustfd_response_meta_object <- function(response){
 #' @examples
 #' \dontrun{
 #' library(ustfd)
-#' query <- ustfd_query('/v1/accounting/dts/dts_table_4', sort =c('-record_date'))
+#' query <- ustfd_query('v1/accounting/dts/dts_table_2', sort =c('-record_date'))
 #' response <- ustfd_request(query)
 #' payload_table <- ustfd_response_payload(response)
 #' payload_meta <- ustfd_response_meta_object(response)
@@ -201,15 +201,23 @@ ustfd_response_meta_object <- function(response){
 #'
 ustfd_response_payload <- function(response){
   meta <- ustfd_response_meta_object(response)
+  empty_prototype <- empty_table_prototype(meta$dataTypes)
 
-  if(meta$count == 0) return(empty_table_prototype(meta$dataTypes))
+  if(meta$count == 0) return(empty_prototype)
 
-  record_processor <- record_processor_factory(meta$dataTypes)
-  clean_data <- lapply(response$data, record_processor)
-  dplyr::bind_rows(clean_data)
+  parsed_payload(response$data, meta$dataTypes)
 }
 
-record_processor_factory <- function(types){
+parsed_payload <- function(data, data_types){
+  col_parsers <- col_processor_map(data_types)
+  dplyr::mutate(
+    dplyr::bind_rows(data),
+    dplyr::across(dplyr::everything(), ~dplyr::if_else(.x == 'null', NA, .x)),
+    dplyr::across(dplyr::everything(), ~col_parsers[[dplyr::cur_column()]](.x))
+  )
+}
+
+col_processor_map <- function(types){
   type_processor_map <- list(
     'DATE' = lubridate::ymd,
     'PERCENTAGE' = readr::parse_number,
@@ -222,13 +230,17 @@ record_processor_factory <- function(types){
     'STRING' = as.character
   )
 
-  record_processors <- purrr::set_names(
+  purrr::set_names(
     type_processor_map[unlist(types)],
     names(types)
   )
+}
+
+record_processor_factory <- function(types){
+  record_processors <- col_processor_map(types)
   processor <- function(record){
     purrr::imap(
-      purrr::modify_if(record, ~.x == 'null', ~NA),
+      purrr::modify_if(record, ~.x == 'null', ~NA_character_),
       ~ record_processors[[.y]](.x)
     )
   }
