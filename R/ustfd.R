@@ -5,14 +5,7 @@
 #' `ustfd_simple()` aggregates the workflow for retrieving data from the API
 #' into a single call.
 #'
-#' @param endpoint required string representing an API endpoint
-#' @param filter optional list used to subset the data. known filter operators
-#' are '>', '>=', '<', '<=', '=', and 'in'
-#' @param fields optional string vector of the fields to be retrieved
-#' @param sort optional string or string vector. Ordering defaults to ascending,
-#' to specify descending order precede the field name with '-'
-#' @param page_size optional integer for pagination
-#' @param page_number optional integer for pagination
+#' @inheritParams ustfd_query
 #' @param user_agent optional string
 #'
 #' @return a list containing the following items
@@ -210,11 +203,28 @@ ustfd_response_payload <- function(response){
 
 parsed_payload <- function(data, data_types){
   col_parsers <- col_processor_map(data_types)
-  dplyr::mutate(
-    dplyr::bind_rows(data),
-    dplyr::across(dplyr::everything(), ~dplyr::if_else(.x == 'null', NA, .x)),
-    dplyr::across(dplyr::everything(), ~col_parsers[[dplyr::cur_column()]](.x))
+  tbl <- lapply(
+    payload_transpose(data, template = names(data_types)),
+    function(x){ x[x == 'null'] <- NA; x}
   )
+  rm(data)
+  #lapply( # against all expectations this actually profiles worse than imap
+  #  rlang::set_names(names(tbl), names(tbl)),
+  #  function(nm) col_parsers[[nm]](tbl[[nm]])
+  #)
+  parsed <- purrr::imap(tbl, function(.x, nm) col_parsers[[nm]](.x))
+  tibble::as_tibble(parsed)
+}
+
+#purrr::list_transpose is slow and dplyr::bind_rows uses a lot of memory.
+payload_transpose <- function(x, template){
+  len <- length(x)
+  wid <- length(template)
+  y <- rlang::rep_named(template, list())
+  for(col in template){
+    y[[col]] <- vapply(x, .subset2, character(1), col, USE.NAMES = FALSE)
+  }
+  y
 }
 
 col_processor_map <- function(types){

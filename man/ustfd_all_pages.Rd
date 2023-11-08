@@ -9,7 +9,7 @@ ustfd_all_pages(
   filter = NULL,
   fields = NULL,
   sort = NULL,
-  page_size = 10000,
+  page_size = 10000L,
   slowly = FALSE,
   pause = 0.25,
   quiet = TRUE,
@@ -19,13 +19,13 @@ ustfd_all_pages(
 \arguments{
 \item{endpoint}{required string representing an API endpoint}
 
-\item{filter}{optional list used to subset the data. known filter operators
-are '>', '>=', '<', '<=', '=', and 'in'}
+\item{filter}{optional list used to subset the data. See \link{filter-syntax} for
+more information.}
 
-\item{fields}{optional string vector of the fields to be retrieved}
+\item{fields}{optional character vector of the fields to be retrieved}
 
-\item{sort}{optional string or string vector. Ordering defaults to ascending,
-to specify descending order precede the field name with '-'}
+\item{sort}{optional string or character vector. Ordering defaults to
+ascending, to specify descending order precede the field name with '-'}
 
 \item{page_size}{optional integer for pagination}
 
@@ -35,7 +35,7 @@ to specify descending order precede the field name with '-'}
 
 \item{quiet}{when set to \code{FALSE} updates will be output via a message}
 
-\item{user_agent}{optional string}
+\item{user_agent}{string, optional}
 }
 \value{
 a list containing the following items
@@ -49,6 +49,11 @@ See \code{\link[=ustfd_response_payload]{ustfd_response_payload()}}
 \code{ustfd_all_pages()} is similar to \code{ustfd_simple()} with the difference that,
 for requests that generate multiple pages of results, it will request all
 pages and merge them into a single result.
+
+While care has been taken to optimize \code{ustfd_all_pages()}, for requests
+spanning more than 10 pages you should consider breaking up the call further
+if memory use is a concern, especially if you are writing the results to disk
+or a database with atomic transactions.
 }
 \examples{
 \dontrun{
