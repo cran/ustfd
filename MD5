@@ -1,10 +1,10 @@
-2a5e32b8ded5fb7501b29d612d18932a *DESCRIPTION
+138458dc6ab8a143d98cf3a7e358c71c *DESCRIPTION
 71cac8869aace98dc2c4d4936b4fe0dd *LICENSE
 e30732a8a777a44f42068899da1a0736 *NAMESPACE
-aa6a05debc89c7f0a6c41fa7c0853b5f *NEWS.md
+6a262088994d1f2b86cd09fa120f060e *NEWS.md
 781cf4d5d5ebce8f0ed9ab0db98f34bf *R/paged_request.R
 5fbf210433063621842f173c3cf58496 *R/sysdata.rda
-c3bb7d7d0c5efa9a4c2ee0d103a67c2e *R/ustfd.R
+c8ee19df04f7f90f83bc8052010404ae *R/ustfd.R
 7ceaa6952635692053dde0de3605d343 *R/ustfd_apis.R
 686845921e56856972eef3282d104587 *R/ustfd_endpoints.R
 f2d1a75147e4cda775098c517dc3529f *R/ustfd_query.R
@@ -20,7 +20,7 @@ ab7e23cfe509828c314ccbd660109026 *man/ustfd_request.Rd
 1a2da905f59a33b9d66797dc491bf636 *man/ustfd_response_meta_object.Rd
 035a819beb39dbc02b7c6afe592ceea5 *man/ustfd_response_payload.Rd
 eb7b5c4d1352cab0d136e25aea3ee194 *man/ustfd_simple.Rd
-1f2cc7c07a92e43758d010b9e0448138 *man/ustfd_table_columns.Rd
+5b19c05c5e133f0fa825e35ff82a281a *man/ustfd_table_columns.Rd
 df435b30010ad8da6bf3d17c1e12c040 *man/ustfd_tables.Rd
 eb1abbe19be056b026774a39c8f822fb *man/ustfd_url.Rd
 6edd84d2289d607c37454a06581ce5ee *tests/testthat.R
